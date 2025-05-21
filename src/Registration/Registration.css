@@ -1,0 +1,224 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh; /* Устанавливаем минимальную высоту body равной высоте вьюпорта */
+  overflow-y: auto; /* Разрешаем вертикальную прокрутку при необходимости */
+}
+
+.background {
+  width: 100%;
+  /* Изменяем height на min-height и auto, чтобы фон растягивался по содержимому */
+  min-height: 100vh;
+  height: auto;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Добавляем padding для отступов по краям */
+  box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+.reg-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 800px;
+  max-width: 90%;
+  /* Добавляем margin для центрирования и отступов */
+  margin: auto;
+}
+
+.reg-header-block {
+  background: #908391;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px #00000026;
+  box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+.reg-header-block h2 {
+  margin: 0; /* Убраны стандартные отступы */
+  color: #FEE9E7;
+  font-weight: 400;
+  font-size: 48px;
+}
+
+.reg-content-block {
+  background: #fff;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px #00000026;
+  box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Общие стили для всех input, могут быть переопределены для fio-item */
+.form-group input {
+  width: 100%; /* Возможно, потребуется корректировка */
+  padding: 16px;
+  border: 1px solid #D9D9D9;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Стили для группы ФИО, чтобы элементы были в строку */
+.fio-group {
+  display: flex; /* Используем Flexbox */
+  gap: 10px; /* Расстояние между элементами ФИО */
+  /* Убираем margin-bottom, так как он будет у каждого fio-item */
+}
+
+/* Стили для каждого элемента ФИО (обертка label + input) */
+.fio-item {
+  flex-grow: 1; /* Позволяет элементам занимать доступное пространство */
+  flex-basis: 01; /* Базовый размер 0, чтобы flex-grow работал корректно */
+  display: flex; /* Flexbox для label и input внутри fio-item */
+  flex-direction: column; /* label и input друг под другом */
+}
+
+/* Стили для input внутри fio-item, чтобы они занимали всю ширину своего контейнера */
+.fio-item input {
+  width: 100%; /* Занимает всю ширину fio-item */
+  /* Убираем или корректируем padding/border по необходимости */
+}
+
+/* Корректировка отступа снизу для fio-group, если нужно */
+.reg-content-block .form-group:last-child {
+    margin-bottom: 0; /* Убираем нижний отступ у последней группы форм */
+}
+
+/* Добавляем отступ снизу для fio-group */
+.fio-group {
+    margin-bottom: 16px;
+}
+
+
+.reg-button {
+  width: 100%;
+  background-color: #908391;
+  color: #FEE9E7;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.reg-button:hover {
+  background-color: #726972;
+}
+
+/* Стили для ошибок клиентской валидации (под полями) */
+.client-error-message {
+  color: #ff0000; /* Красный цвет */
+  font-size: 0.8em;
+  margin-top: 4px; /* Уменьшен отступ */
+  margin-bottom: 0; /* Убран нижний отступ */
+  /* Можно добавить padding-left, если нужно выравнивание */
+}
+
+/* Стили для блока сообщений от сервера (под кнопкой) */
+.server-message-block {
+  margin-top: 20px; /* Отступ сверху от кнопки */
+  padding: 15px;
+  border-radius: 8px; /* Закругленные углы */
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  /* Добавляем плавное появление/исчезновение (опционально) */
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Стили для блока ошибки от сервера */
+.server-message-block.error {
+  background-color: #ffe0e0; /* Светло-красный фон */
+  color: #d32f2f; /* Темно-красный текст */
+  border: 1px solid #d32f2f; /* Красная рамка */
+}
+
+/* Стили для блока успешного сообщения от сервера */
+.server-message-block.success {
+  background-color: #e8f5e9; /* Светло-зеленый фон */
+  color: #388e3c; /* Темно-зеленый текст */
+  border: 1px solid #388e3c; /* Зеленая рамка */
+}
+
+/* Стили для текста внутри блока сообщения */
+.server-message-block p {
+  margin: 0; /* Убираем стандартные отступы у параграфа */
+}
+
+/* Медиа-запрос для адаптивности: на маленьких экранах возвращаем колонку */
+@media (max-width: 768px) {
+  .background {
+    padding: 10px; /* Уменьшаем padding на маленьких экранах */
+  }
+
+  .reg-header-block h2 {
+    font-size: 36px; /* Уменьшаем размер шрифта заголовка */
+  }
+
+  .reg-content-block {
+      padding: 15px; /* Уменьшаем padding контента */
+  }
+
+  .form-group label {
+      font-size: 18px; /* Уменьшаем размер шрифта меток */
+  }
+
+  .form-group input {
+      padding: 12px; /* Уменьшаем padding полей ввода */
+      font-size: 14px; /* Уменьшаем размер шрифта полей ввода */
+  }
+
+  .fio-group {
+    flex-direction: column; /* В колонку на маленьких экранах */
+    gap: 0; /* Убираем расстояние */
+    margin-bottom: 0; /* Убираем отступ снизу у всей группы */
+  }
+
+  .fio-item {
+    margin-bottom: 15px; /* Отступ между элементами в колонке */
+  }
+
+  .fio-item:last-child {
+    margin-bottom: 0; /* Убираем отступ у последнего элемента */
+  }
+
+  .fio-item input {
+    width: 100.2%; /* Возвращаем ширину как у других полей, возможно, потребуется корректировка */
+  }
+
+  .reg-button {
+      font-size: 20px; /* Уменьшаем размер шрифта кнопки */
+      padding: 10px; /* Уменьшаем padding кнопки */
+      margin-top: 15px; /* Корректируем отступ сверху */
+  }
+  /* Адаптивные стили для блока сообщений */
+  .server-message-block {
+    margin-top: 15px; /* Уменьшаем отступ сверху на маленьких экранах */
+    padding: 10px; /* Уменьшаем padding */
+    font-size: 0.9em; /* Немного уменьшаем шрифт */
+}
+}
+

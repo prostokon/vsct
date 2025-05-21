@@ -1,0 +1,491 @@
+/* desktop.css */
+
+/* Базовые стили, которые могут быть общими или специфичными для десктопа */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Убедимся, что html и body занимают всю высоту */
+  font-family: 'Arial', sans-serif;
+  box-sizing: border-box;
+  /* ИСПРАВЛЕНО: Позволяем body прокручиваться по умолчанию, если контент превышает 100% */
+  overflow-y: auto;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Фон */
+.background {
+  position: static; /* ИСПРАВЛЕНО: Фон не фиксирован, прокручивается вместе с контентом */
+  width: 100%;
+  height: auto; /* ИСПРАВЛЕНО: Высота фона адаптируется к содержимому */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* ИСПРАВЛЕНО: Убираем overflow-y: hidden; чтобы фон не обрезался */
+  /* overflow-y: hidden; */
+  display: flex;
+  flex-direction: row;
+  /* ИСПРАВЛЕНО: Выравниваем содержимое по левому краю в базовых стилях */
+  justify-content: flex-start;
+  align-items: flex-start; /* Выравниваем содержимое по верху */
+}
+
+/* Медиа-запрос для десктопных экранов (ширина от 769px и выше) */
+@media (min-width: 769px) {
+
+  /* ИСПРАВЛЕНО: Убираем явное выравнивание background, так как оно уже в базовых стилях */
+  .background {
+      /* justify-content: flex-start; */
+  }
+
+  /* Контейнер для десктопного макета (трехколоночный) */
+  .desktop-layout-container {
+    display: flex;
+    flex-direction: row; /* Кнопки слева, контент по центру, правая боковая панель справа */
+    width: 100%; /* Занимает всю доступную ширину родителя */
+    height: auto; /* ИСПРАВЛЕНО: Высота адаптируется к содержимому */
+    /* ИСПРАВЛЕНО: УБРАНО max-width: 1400px; */
+    /* max-width: 1400px; */
+    padding: 0 20px; /* Добавляем горизонтальные отступы для контента */
+    box-sizing: border-box;
+    align-items: flex-start; /* Выравниваем элементы по верху */
+    /* ИСПРАВЛЕНО: Убираем margin: 0 auto; для горизонтального центрирования */
+    margin: 0;
+    position: relative; /* Добавляем относительное позиционирование для абсолютного позиционирования (если нужно) */
+    padding-top: 20px; /* Отступ сверху для всего контейнера */
+    gap: 20px; /* Добавляем промежуток между колонками */
+  }
+
+  /* Левая колонка: Блок с кнопками */
+  .button-column {
+    display: flex;
+    flex-direction: column; /* Кнопки располагаются вертикально */
+    align-items: flex-start; /* Выравниваем содержимое колонки кнопок по левому краю */
+    padding: 0; /* Убираем padding, так как общий отступ у desktop-layout-container */
+    flex-shrink: 0; /* Предотвращаем сжатие колонки кнопок */
+    flex-grow: 0; /* Предотвращаем рост */
+    flex-basis: 80px; /* Устанавливаем базовый размер */
+    width: 80px; /* Фиксированная ширина для колонки кнопок */
+    margin-right: 0; /* Убираем правый отступ */
+    padding-top: 20px; /* Добавляем верхний отступ для выравнивания с остальным контентом */
+    /* ИСПРАВЛЕНО: Убираем абсолютное позиционирование */
+    position: static;
+    height: auto; /* Высота адаптируется к содержимому */
+  }
+
+  /* Скруглённый блок с кнопками */
+  .rounded-button-group {
+    display: flex;
+    flex-direction: column; /* Кнопки внутри блока располагаются вертикально */
+    align-items: center; /* Центрируем кнопки внутри блока */
+    gap: 16px; /* Расстояние между кнопками */
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 40px; /* Возвращаем равномерное скругление */
+    padding: 30px 10px; /* Корректируем внутренние отступы */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Корректируем тень */
+    width: auto; /* Ширина по содержимому */
+  }
+
+  /* Стили кнопок */
+  .rounded-button-group button {
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #f0f2f5;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    font-weight: bold;
+  }
+
+  .rounded-button-group button:hover {
+    background: #e0e2e5;
+    transform: scale(1.08);
+  }
+
+  .rounded-button-group button.active {
+    background: #007bff;
+    color: white;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #007bff;
+  }
+
+  /* Центральная колонка: Основной контент (Поиск, Идеи, Пагинация) */
+  .central-content-column {
+    display: flex;
+    flex-direction: column; /* Элементы располагаются вертикально */
+    flex-grow: 1; /* Позволяет этой колонке занимать все доступное пространство */
+    flex-shrink: 1; /* Позволяет этой колонке сжиматься при необходимости */
+    flex-basis: 0; /* Устанавливаем базовый размер */
+    /* ИСПРАВЛЕНО: Убираем overflow-y: auto; и height: 100%; чтобы колонка расширялась */
+    overflow-y: visible;
+    height: auto;
+    padding-top: 0; /* Убираем верхний отступ, так как общий отступ у desktop-layout-container */
+    padding-bottom: 0; /* Убираем нижний отступ, так как общий отступ у desktop-layout-container */
+    box-sizing: border-box;
+    /* ИСПРАВЛЕНО: Убираем margin-left, так как кнопки не абсолютно позиционированы */
+    /* margin-left: 100px; */
+    /* ИСПРАВЛЕНО: Убираем margin-right, так как gap на desktop-layout-container */
+    /* margin-right: 20px; */
+  }
+
+  /* Контейнер для поиска и идей (внутри центральной колонки) */
+  .search-ideas-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* Выравниваем поиск и идеи по левому краю центральной колонки */
+      width: 100%; /* Занимает всю доступную ширину родителя */
+      margin-bottom: 20px; /* Отступ снизу */
+  }
+
+  /* Поисковик */
+  .search-container {
+    position: relative;
+    /* ИСПРАВЛЕНО: Уменьшаем max-width для ограничения длины поиска */
+    max-width: 600px; /* Установите желаемую максимальную ширину */
+    width: 100%; /* Поиск занимает всю доступную ширину до max-width */
+    box-sizing: border-box;
+    text-align: left;
+    margin-bottom: 20px; /* Отступ снизу от поиска */
+  }
+
+  .search-input {
+    width: 100%;
+    height: 40px;
+    padding: 8px 45px 8px 20px;
+    border: 2px solid #ddd;
+    border-radius: 30px;
+    font-size: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+    box-sizing: border-box;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: #8a2be2;
+    box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #2f2f2f;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+  }
+
+  .search-clear:hover {
+    color: #666;
+  }
+
+  /* Список идей */
+  .ideas-container {
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Список идей занимает всю доступную ширину центральной колонки */
+    max-width: 100%; /* Убираем ограничение max-width, чтобы список занимал всю ширину */
+    box-sizing: border-box;
+    text-align: left;
+    overflow-y: visible;
+    height: auto;
+  }
+
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px; /* Увеличиваем расстояние между плитками */
+    overflow-y: visible;
+    height: auto;
+  }
+
+  .idea-tile {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    backdrop-filter: blur(5px);
+    border-radius: 8px; /* Увеличиваем скругление углов */
+    padding: 12px 20px; /* Увеличиваем внутренние отступы */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Увеличиваем тень */
+    transition: all 0.2s ease;
+    min-height: 50px; /* Увеличиваем минимальную высоту */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Добавляем тонкую рамку для "толщины" */
+  }
+
+  .idea-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Увеличиваем тень при наведении */
+  }
+
+  .idea-title {
+    margin: 0;
+    color: #333;
+    font-size: 18px; /* Размер шрифта для десктопа */
+    font-weight: 700; /* Увеличиваем толщину шрифта */
+    flex-grow: 1;
+    margin-right: 15px; /* Увеличиваем отступ справа */
+    word-break: break-word;
+  }
+
+  .idea-date {
+    color: #555; /* Делаем цвет немного темнее */
+    font-size: 15px; /* Размер шрифта для десктопа */
+    flex-shrink: 0;
+  }
+
+  /* Пагинация */
+  .pagination-container {
+    position: static;
+    transform: none;
+    z-index: 1000;
+    background: transparent;
+    padding: 12px 24px;
+    border-radius: 30px;
+    display: flex;
+    gap: 8px;
+    justify-content: center; /* Центрируем пагинацию */
+    margin-top: 20px; /* Отступ сверху от пагинации */
+  }
+
+  .pagination {
+    display: inline-flex;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .pagination button {
+    padding: 8px 12px;
+    border: 1px transparent;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #333;
+    transition: all 0.25s;
+  }
+
+  .pagination button:hover {
+    background-color: #eee;
+  }
+
+  .pagination button.active {
+    background-color: #8a2be2;
+    color: white;
+    border-color: #8a2be2;
+  }
+
+  .ellipsis {
+    padding: 8px 12px;
+    color: #333;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    color: #666;
+  }
+
+  .error {
+    color: #dc3545;
+    text-align: center;
+    padding: 20px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin: 20px auto;
+    max-width: 500px;
+  }
+
+  /* Правая боковая панель для десктопа */
+  .right-sidebar {
+      display: flex;
+      flex-direction: column; /* Элементы располагаются вертикально */
+      align-items: flex-end; /* Выравниваем содержимое по правому краю */
+      flex-shrink: 0; /* Предотвращаем сжатие */
+      flex-grow: 0; /* Предотвращаем рост */
+      flex-basis: 300px; /* Устанавливаем базовый размер */
+      width: 300px; /* Фиксированная ширина для правой боковой панели */
+      gap: 20px; /* Промежуток между профилем и фильтрами */
+      padding-top: 20px; /* Добавляем верхний отступ для выравнивания с остальным контентом */
+  }
+
+  /* Контейнер профиля для десктопного режима */
+  .profile-container {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 30px; /* Скругленные углы */
+      padding: 8px 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Тень */
+      z-index: 100; /* Убедимся, что находится поверх других элементов */
+      width: auto; /* Ширина по содержимому */
+      max-width: 100%; /* Занимает всю доступную ширину родителя */
+      box-sizing: border-box;
+      align-self: flex-end; /* Выравниваем элемент профиля по правому краю внутри flex-контейнера */
+  }
+
+  .profile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #e0e2e5; /* Светлый фон для иконки */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 10px;
+      flex-shrink: 0;
+  }
+
+  .profile-info {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1; /* Занимает доступное пространство */
+      overflow: hidden; /* Скрываем переполняющий текст */
+  }
+
+  .profile-name {
+      font-size: 16px; /* Размер шрифта для десктопа */
+      font-weight: bold;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+
+  .profile-status {
+      font-size: 14px; /* Размер шрифта для десктопа */
+      color: #555;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+  }
+
+
+  /* Фильтр */
+  .filter-container {
+      width: 100%; /* Занимает всю доступную ширину родителя */
+      flex-shrink: 0; /* Предотвращаем сжатие колонки фильтра */
+  }
+
+  .filters-container {
+    font-family: 'Arial', sans-serif;
+    width: 100%; /* Занимает всю доступную ширину .filter-container */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: rgba(249, 249, 249, 0.9);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .filters-title {
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .filter-divider {
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 0 0 10px 0;
+  }
+
+  .filter-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .filter-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #000;
+    border-radius: 3px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .filter-checkbox:checked {
+    background-color: transparent;
+    border-color: #000;
+  }
+
+  .filter-checkbox:checked::after {
+    content: "✓";
+    position: absolute;
+    color: #000;
+    font-size: 14px;
+    left: 2px;
+    top: -2px;
+  }
+
+  .filter-label {
+    font-size: 14px;
+    color: #333;
+    user-select: none;
+    flex-grow: 1;
+  }
+
+  .reset-filters-button {
+    width: 80%; /* Уменьшаем ширину кнопки */
+    margin: 10px auto 0 auto; /* Центрируем кнопку */
+    background-color: #8a2be2;
+    color: white;
+    border: none;
+    /* ИСПРАВЛЕНО: Закругляем углы кнопки сброса фильтров */
+    border-radius: 30px; /* Установите желаемое значение скругления */
+    /* ИСПРАВЛЕНО: Уменьшаем вертикальный padding для уменьшения высоты */
+    padding: 8px 0;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Добавляем тень для соответствия другим элементам */
+  }
+
+  .reset-filters-button:hover {
+    background-color: #7b1fa2;
+  }
+
+  .reset-filters-button:active {
+    background-color: #6a1b9a;
+  }
+  
+  .mobile-sidebar-toggle-button {
+  display: none;
+}
+
+/* Скрываем мобильную боковую панель на десктопе */
+.mobile-sidebar-overlay {
+  display: none;
+}
+}

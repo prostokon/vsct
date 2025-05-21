@@ -1,0 +1,274 @@
+html, body {
+  position: relative; /* Нужно для позиционирования LanguageSwitcher */
+  min-height: 100vh;
+  overflow-y: auto;
+  font-family: 'Arial', sans-serif;
+}
+
+.language-switcher {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    z-index: 2;
+
+    /* Чтобы кнопки были рядом друг с другом */
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Общие стили для кнопок */
+  .language-btn {
+    padding: 8px 16px;
+    border: 2px solid #000;
+    background: transparent;  /* Прозрачный фон */
+    color: #000;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  /* Стили для активной (выбранной) кнопки */
+  .language-btn.active {
+    background: #908391;
+    color: #FEE9E7;
+    border: none;
+  }
+
+/* Фон */
+.background {
+  width: 100%;
+  /* Изменяем height на min-height и auto, чтобы фон растягивался по содержимому */
+  min-height: 100vh;
+  height: auto;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Добавляем padding для отступов по краям */
+  box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+/* Обёртка для двух блоков (заголовок + форма) */
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 800px;
+  max-width: 90%;
+  /* Добавляем margin для центрирования и отступов */
+  margin: auto;
+}
+
+/* Верхний блок с заголовком */
+.login-header-block {
+  background: #908391;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px #00000026;
+  box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+/*Текст блока с заголовком*/
+.login-header-block h2 {
+  margin: 0; /* Убраны стандартные отступы */
+  color: #FEE9E7;
+  font-weight: 400;
+  font-size: 48px;
+}
+
+/* Нижний блок (форма) */
+.login-content-block {
+  background: #fff;
+  width: 100%;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px #00000026;
+  box-sizing: border-box; /* Учитываем padding в размере */
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 20px;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #D9D9D9;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+/* Кнопка "Войти" */
+.login-button {
+  width: 100%;
+  background-color: #908391;
+  color: #FEE9E7;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-bottom: 20px; /* Добавляем отступ снизу для разделения от ссылок */
+}
+
+.login-button:hover {
+  background-color: #726972;
+}
+
+/* Новый контейнер для ссылок */
+.login-links-container {
+    display: flex; /* Используем Flexbox */
+    justify-content: space-between; /* Распределяем элементы по сторонам */
+    align-items: center; /* Выравнивание по центру по вертикали */
+    width: 100%; /* Занимает всю ширину родителя */
+    margin-top: 10px; /* Отступ сверху */
+}
+
+
+/* Кнопка "Забыли пароль?" */
+.forgot-password {
+  /* Убираем margin-bottom и margin-top, так как они контролируются родительским контейнером */
+  margin: 0;
+}
+
+.forgot-password a {
+  text-decoration: none; /* Убираем подчеркивание */
+  color: #1E1E1E;
+  font-size: 16px;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline; /* Оставляем подчеркивание при наведении */
+}
+
+/* Ссылка "Зарегистрироваться" */
+.registration-link {
+    /* Убираем margin-bottom и margin-top */
+    margin: 0;
+}
+
+.registration-link-text { /* Класс для текста ссылки, если нужно стилизовать отдельно */
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #1E1E1E;
+    font-size: 16px;
+}
+
+.registration-link-text:hover {
+    text-decoration: underline; /* Оставляем подчеркивание при наведении */
+}
+
+/* Стили для ошибок клиентской валидации (под полями) */
+.client-error-message {
+  color: #ff0000; /* Красный цвет */
+  font-size: 0.8em;
+  margin-top: 4px; /* Уменьшен отступ */
+  margin-bottom: 0; /* Убран нижний отступ */
+}
+
+/* Стили для блока сообщений от сервера (под кнопкой) */
+.server-message-block {
+  margin-top: 20px; /* Отступ сверху от кнопки */
+  padding: 15px;
+  border-radius: 8px; /* Закругленные углы */
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  width: 100%; /* Занимает всю ширину контейнера */
+  box-sizing: border-box; /* Учитываем padding в ширине */
+}
+
+/* Стили для блока ошибки от сервера */
+.server-message-block.error {
+  background-color: #ffe0e0; /* Светло-красный фон */
+  color: #d32f2f; /* Темно-красный текст */
+  border: 1px solid #d32f2f; /* Красная рамка */
+}
+
+/* Стили для блока успешного сообщения от сервера */
+.server-message-block.success {
+  background-color: #e8f5e9; /* Светло-зеленый фон */
+  color: #388e3c; /* Темно-зеленый текст */
+  border: 1px solid #388e3c; /* Зеленая рамка */
+}
+
+/* Стили для текста внутри блока сообщения */
+.server-message-block p {
+  margin: 0; /* Убираем стандартные отступы у параграфа */
+}
+
+@media (max-width: 768px) {
+  .background {
+    padding: 10px; /* Уменьшаем padding на маленьких экранах */
+  }
+
+  .login-header-block h2 {
+    font-size: 36px; /* Уменьшаем размер шрифта заголовка */
+  }
+
+  .login-content-block {
+      padding: 15px; /* Уменьшаем padding контента */
+  }
+
+  .form-group label {
+      font-size: 18px; /* Уменьшаем размер шрифта меток */
+  }
+
+  .form-group input {
+      padding: 12px; /* Уменьшаем padding полей ввода */
+      font-size: 14px; /* Уменьшаем размер шрифта полей ввода */
+  }
+  .login-button {
+    font-size: 20px; /* Уменьшаем размер шрифта кнопки */
+    padding: 10px; /* Уменьшаем padding кнопки */
+    margin-top: 15px; /* Корректируем отступ сверху */
+    margin-bottom: 15px; /* Корректируем отступ снизу */
+  }
+
+  /* На маленьких экранах ссылки могут снова стать в колонку, если нужно */
+  .login-links-container {
+      flex-direction: column; /* В колонку на маленьких экранах */
+      align-items: center; /* Выравнивание по центру */
+      gap: 10px; /* Отступ между ссылками */
+  }
+  .forgot-password span,
+    .forgot-password a,
+    .registration-link-text {
+        font-size: 14px; /* Уменьшаем размер шрифта ссылок */
+    }
+
+    .server-message-block {
+        margin-top: 15px;
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    /* Адаптивные стили для LanguageSwitcher */
+    .language-switcher {
+        top: 10px; /* Уменьшаем отступ сверху */
+        right: 10px; /* Уменьшаем отступ справа */
+        gap: 5px; /* Уменьшаем расстояние между кнопками */
+    }
+
+    .language-btn {
+        padding: 6px 10px; /* Уменьшаем padding кнопок языка */
+        font-size: 12px; /* Уменьшаем размер шрифта кнопок языка */
+    }
+}

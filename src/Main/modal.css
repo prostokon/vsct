@@ -1,0 +1,481 @@
+/* modal.css */
+
+/* Оверлей (фон) - теперь всегда на весь экран, но изначально невидимый */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0; /* Занимаем всю ширину */
+  width: 100%;
+  height: 100%;
+  background: none; /* Изначально без затемнения */
+  display: flex;
+  justify-content: flex-end; /* Выравниваем содержимое по правому краю */
+  align-items: flex-start; /* Выравниваем содержимое по верху */
+  z-index: 1000;
+  visibility: hidden; /* Изначально скрываем оверлей */
+  opacity: 0; /* Изначально полностью прозрачный */
+  /* Анимация затемнения фона и видимости */
+  transition: background-color 0.3s ease-in-out, opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Класс для активного состояния оверлея (когда панель открыта) */
+.modal-overlay.open {
+  visibility: visible; /* Делаем оверлей видимым */
+  opacity: 1; /* Делаем оверлей непрозрачным */
+  /* На десктопе фон остается прозрачным, затемнение только на мобильных */
+}
+
+/* Контейнер содержимого модального окна - боковая панель */
+.modal-content {
+  background: #f9f9f9; /* Светлый фон */
+  padding: 30px;
+  /* Скругление только слева */
+  border-radius: 10px 0 0 10px;
+  position: relative; /* Относительное позиционирование для дочерних элементов */
+  /* Увеличиваем ширину для десктопа */
+  width: 50%; /* Установлена ширина на 50% */
+  max-width: 100%; /* На мобильных может занимать всю ширину */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Пространство между основными блоками (названием идеи, деталями, комментариями) */
+  height: 100%; /* Занимает всю высоту */
+  overflow-y: auto; /* Добавляем прокрутку для содержимого панели */
+  /* Изначально скрываем панель, сдвигая ее вправо за пределы экрана */
+  transform: translateX(100%);
+  /* Добавляем transition к самому элементу панели */
+  transition: transform 0.3s ease-in-out; /* Добавляем анимацию для выезда/скрытия */
+}
+
+/* Класс для активного состояния содержимого (когда панель открыта) */
+.modal-overlay.open .modal-content {
+  transform: translateX(0); /* Сдвигаем панель обратно, чтобы она появилась */
+}
+
+/* Кнопка "Назад" */
+.modal-back-button {
+  position: absolute;
+  top: 15px;
+  left: 15px; /* Кнопка остается слева внутри панели */
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s;
+  z-index: 10; /* Убедимся, что кнопка поверх содержимого */
+}
+
+.modal-back-button:hover {
+  color: #333;
+}
+
+/* Кнопка "Сохранить" - новая кнопка, увеличен размер */
+.modal-save-button {
+  position: absolute;
+  top: 15px; /* Выравниваем по верхнему краю */
+  right: 15px; /* Располагаем у правого края */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; /* Увеличенный размер круга */
+  height: 36px; /* Увеличенный размер круга */
+  background-color: #4CAF50; /* Зеленый цвет */
+  color: white; /* Цвет галочки */
+  border: none;
+  border-radius: 50%; /* Делаем круглым */
+  font-size: 22px; /* Увеличенный размер галочки */
+  cursor: pointer; /* Курсор в виде указателя */
+  transition: background-color 0.2s ease;
+  z-index: 10; /* Убедимся, что кнопка поверх содержимого */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Небольшая тень */
+}
+
+.modal-save-button:hover {
+  background-color: #388E3C; /* Более темный зеленый при наведении */
+}
+
+
+/* Поле ввода названия идеи - Сделано бесшовным с нижней границей, увеличен отступ сверху, текст по центру, увеличен шрифт */
+.idea-title-input {
+  width: 100%;
+  padding: 10px 0; /* Убираем горизонтальный padding, оставляем только верхний/нижний */
+  margin-top: 40px; /* Увеличиваем верхний отступ для создания пространства под кнопкой */
+  border: none; /* Убираем все границы */
+  border-bottom: 1px solid #ddd; /* Добавляем только нижнюю границу */
+  font-size: 36px; /* Увеличенный размер шрифта */
+  box-sizing: border-box;
+  background-color: transparent; /* Делаем фон прозрачным */
+  outline: none; /* Убираем обводку при фокусе */
+  text-align: center; /* Выравниваем текст по центру */
+}
+
+/* Единый блок для полей ввода информации об идее - Светло-фиолетовый фон */
+.idea-details-block {
+  background: #e0ccff; /* Светло-фиолетовый фон */
+  padding: 20px; /* Внутренний отступ фиолетового блока */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Пространство между отдельными белыми блоками внутри фиолетового */
+}
+
+/* Отдельный белый блок для каждой секции информации об идее внутри фиолетового блока */
+.idea-section-inner {
+  background: #fff; /* Белый фон */
+  padding: 15px; /* Внутренний отступ белых блоков */
+  border-radius: 5px; /* Скругление углов белых блоков */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Легкая тень для белых блоков */
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Пространство между заголовком и полем ввода внутри белого блока */
+}
+
+
+.idea-section-inner h3 {
+  margin: 0; /* Убираем внешний отступ у заголовка */
+  color: #555;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Текстовые блоки внутри белых блоков - Сделаны бесшовными с размером шрифта 16px и автоматической высотой */
+.idea-section-inner textarea,
+.idea-section-inner input[type="text"] {
+  width: 100%;
+  padding: 10px 0; /* Убираем горизонтальный padding */
+  border: none; /* Убираем все границы */
+  border-bottom: 1px solid #ddd; /* Добавляем только нижнюю границу */
+  font-size: 16px; /* Размер шрифта 16px */
+  box-sizing: border-box;
+  min-height: auto; /* Убираем минимальную высоту */
+  height: auto; /* Автоматическая высота */
+  resize: vertical; /* Разрешаем изменение размера по вертикали */
+  background-color: transparent; /* Делаем фон прозрачным */
+  outline: none; /* Убираем обводку при фокусе */
+  overflow: visible; /* Делаем текст видимым */
+  white-space: normal; /* Разрешаем перенос текста */
+  text-overflow: clip; /* Убираем многоточие */
+}
+
+.idea-section-inner input[type="text"] {
+  min-height: auto; /* Убедимся, что min-height auto */
+  height: auto; /* Автоматическая высота */
+}
+
+/* Контейнер для отображения овалов стека технологий */
+.tech-stack-items-container {
+  display: flex;
+  flex-wrap: wrap; /* Перенос на новую строку при необходимости */
+  gap: 8px; /* Пространство между овалами */
+  margin-top: 10px; /* Отступ сверху */
+}
+
+/* Стиль для отдельного овала стека технологий */
+.tech-stack-item {
+  display: inline-flex; /* Используем flex для выравнивания текста и кнопки удаления */
+  align-items: center; /* Выравниваем по центру по вертикали */
+  padding: 5px 8px; /* Уменьшаем правый padding, чтобы освободить место для кнопки */
+  border-radius: 20px; /* Скругление для формы овала */
+  font-size: 14px; /* Размер шрифта в овале */
+  color: #333; /* Цвет текста */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Легкая тень */
+  /* Цвет фона будет установлен инлайн в компоненте React */
+}
+
+/* Стиль для кнопки удаления овала */
+.tech-stack-item-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px; /* Размер круга */
+  height: 16px; /* Размер круга */
+  background-color: #fa7272cb; /* Красный цвет */
+  color: white; /* Цвет крестика */
+  border-radius: 50%; /* Делаем круглым */
+  margin-left: 8px; /* Отступ слева от текста */
+  font-size: 10px; /* Размер крестика */
+  cursor: pointer; /* Курсор в виде указателя */
+  transition: background-color 0.2s ease;
+}
+
+.tech-stack-item-delete:hover {
+  background-color: #ff1a1a; /* Более темный красный при наведении */
+}
+
+
+/* Контейнер для комментариев - теперь без фона и паддинга */
+.comments-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Пространство между блоком комментариев и формой добавления */
+}
+
+
+/* Блок со списком комментариев */
+.comments-list-block {
+  background: #fff; /* Белый фон */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Пространство между заголовком и списком комментариев */
+}
+
+.comments-list-block h3 {
+  text-align: center;
+  margin: 0; /* Убираем внешний отступ у заголовка */
+  color: #555;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Список комментариев - теперь отображает блоки в ряд */
+.comments-list {
+  display: flex;
+  flex-direction: row; /* Отображение в ряд */
+  flex-wrap: wrap; /* Перенос на новую строку */
+  gap: 10px; /* Пространство между отдельными комментариями */
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Отдельный блок комментария - Белый фон с черной обводкой */
+.comment-item {
+  background: #fff; /* Белый фон */
+  padding: 10px 15px;
+  border: 1px solid #000; /* Черная обводка */
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  /* Добавляем свойства для отображения в ряд */
+  flex-basis: auto; /* Размер зависит от содержимого */
+  max-width: 100%; /* Не превышать ширину контейнера */
+  box-sizing: border-box; /* Учитываем padding и border в размере */
+  position: relative; /* Для позиционирования кнопки удаления */
+  padding-right: 30px; /* Добавляем правый padding для места под кнопку */
+}
+
+.comment-author {
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.comment-text {
+  font-size: 14px;
+  color: #555;
+  word-break: break-word;
+}
+
+/* Стиль для кнопки удаления комментария - Внутри блока */
+.comment-item-delete {
+  position: absolute; /* Абсолютное позиционирование */
+  top: 5px; /* Сдвиг вниз от верхнего края */
+  right: 5px; /* Сдвиг влево от правого края */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; /* Размер круга */
+  height: 18px; /* Размер круга */
+  background-color: #fa7272cb; /* Красный цвет */
+  color: white; /* Цвет крестика */
+  border-radius: 50%; /* Делаем круглым */
+  font-size: 12px; /* Размер крестика */
+  cursor: pointer; /* Курсор в виде указателя */
+  transition: background-color 0.2s ease;
+  z-index: 1; /* Убедимся, что кнопка поверх содержимого */
+  border: 1px solid #fff; /* Белая обводка вокруг кнопки */
+}
+
+.comment-item-delete:hover {
+  background-color: #ff1a1a; /* Более темный красный при наведении */
+}
+
+
+/* Форма добавления комментария */
+.add-comment-form-block {
+  background: #fff; /* Белый фон */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+.add-comment-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.add-comment-form input[type="text"] {
+  flex-grow: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.add-comment-form button {
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.add-comment-form button:hover {
+  background-color: #7b1fa2;
+}
+
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 768px) {
+  .modal-overlay.open {
+    /* На мобильных затемняем фон */
+    background: rgba(0, 0, 0, 0.6);
+    /* Для полного экрана на мобильных */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    /* Для полного экрана на мобильных */
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    /* Сохраняем скругление углов слева */
+    border-radius: 16px 0 0 16px;
+    padding: 20px; /* Уменьшаем padding для мобильных */
+    /* На мобильных панель также выезжает справа */
+    transform: translateX(100%); /* Скрываем панель */
+  }
+
+  /* При открытии на мобильных */
+  .modal-overlay.open .modal-content {
+    transform: translateX(0); /* Показываем панель */
+  }
+
+  .modal-back-button {
+    font-size: 14px;
+    top: 10px;
+    left: 10px;
+  }
+
+  .modal-save-button {
+      width: 30px; /* Размер круга на мобильных */
+      height: 30px; /* Размер круга на мобильных */
+      font-size: 18px; /* Размер галочки на мобильных */
+      top: 10px; /* Сдвиг вниз на мобильных */
+      right: 10px; /* Сдвиг влево на мобильных */
+  }
+
+
+  .idea-title-input {
+    font-size: 16px; /* Размер шрифта остается 16px на мобильных */
+    padding: 8px 0; /* Убираем горизонтальный padding, оставляем только верхний/нижний */
+    margin-top: 30px; /* Увеличиваем верхний отступ для создания пространства под кнопкой на мобильных */
+    min-height: auto; /* Убираем min-height для мобильных */
+    text-align: center; /* Выравниваем текст по центру */
+  }
+
+  .idea-details-block {
+    background: #e0ccff; /* Светло-фиолетовый фон на мобильных */
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .idea-section-inner {
+      padding: 10px 0; /* Убираем горизонтальный padding на мобильных */
+      gap: 6px;
+  }
+
+  .idea-section-inner h3 {
+    font-size: 14px;
+  }
+
+  .idea-section-inner textarea,
+  .idea-section-inner input[type="text"] {
+    font-size: 16px; /* Размер шрифта 16px на мобильных */
+    padding: 8px 0; /* Убираем горизонтальный padding на мобильных */
+    min-height: auto; /* Убираем минимальную высоту */
+    height: auto; /* Автоматическая высота */
+    resize: vertical; /* Разрешаем изменение размера по вертикали */
+  }
+
+  .comments-container {
+      gap: 15px; /* Пространство между блоком комментариев и формой добавления на мобильных */
+  }
+
+  .comments-list-block {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .comments-list-block h3 {
+    font-size: 14px;
+  }
+
+  .comments-list {
+    /* На мобильных также отображаем в ряд */
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 150px;
+  }
+
+  .comment-item {
+    padding: 8px 12px;
+    /* Добавляем свойства для отображения в ряд на мобильных */
+    flex-basis: auto;
+    max-width: 100%;
+    padding-right: 25px; /* Уменьшаем правый padding на мобильных */
+  }
+
+  .comment-author {
+    font-size: 12px;
+  }
+
+  .comment-text {
+    font-size: 12px;
+  }
+
+  .comment-item-delete {
+      width: 16px; /* Размер круга на мобильных */
+      height: 16px; /* Размер круга на мобильных */
+      font-size: 10px; /* Размер крестика на мобильных */
+      top: 3px; /* Сдвиг вверх на мобильных */
+      right: 3px; /* Сдвиг вправо на мобильных */
+  }
+
+
+  .add-comment-form-block {
+      padding: 15px;
+  }
+
+  .add-comment-form input[type="text"] {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .add-comment-form button {
+    width: 35px;
+    height: 35px;
+  }
+}
