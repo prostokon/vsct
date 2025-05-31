@@ -1,3 +1,4 @@
+// Login.jsx
 import React, { useState,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
@@ -16,12 +17,12 @@ const translations = {
     loginButton: 'Войти',
     forgotPassword: 'Забыли пароль?',
     registrationLink: 'Зарегистрироваться',
-    emailRequired: 'Поле email обязательно для заполнения.', // Добавлен перевод
-    invalidEmailFormat: 'Введите корректный формат email.', // Добавлен перевод
-    passwordRequired: 'Поле пароль обязательно для заполнения.', // Добавлен перевод
-    loginSuccess: 'Вход выполнен успешно!', // Добавлен перевод
-    loginFailed: 'Ошибка входа: ', // Добавлен перевод
-    networkError: 'Ошибка сети или сервера. Попробуйте позже.', // Добавлен перевод
+    emailRequired: 'Поле email обязательно для заполнения.',
+    invalidEmailFormat: 'Введите корректный формат email.',
+    passwordRequired: 'Поле пароль обязательно для заполнения.',
+    loginSuccess: 'Вход выполнен успешно!',
+    loginFailed: 'Ошибка входа: ',
+    networkError: 'Ошибка сети или сервера. Попробуйте позже.',
   },
   en: {
     languageName: 'ENG',
@@ -33,12 +34,12 @@ const translations = {
     loginButton: 'Log in',
     forgotPassword: 'Forgot password?',
     registrationLink: 'Register',
-    emailRequired: 'Email field is required.', // Добавлен перевод
-    invalidEmailFormat: 'Please enter a valid email format.', // Добавлен перевод
-    passwordRequired: 'Password field is required.', // Добавлен перевод
-    loginSuccess: 'Login successful!', // Добавлен перевод
-    loginFailed: 'Login failed: ', // Добавлен перевод
-    networkError: 'Network or server error. Please try again later.', // Добавлен перевод
+    emailRequired: 'Email field is required.',
+    invalidEmailFormat: 'Please enter a valid email format.',
+    passwordRequired: 'Password field is required.',
+    loginSuccess: 'Login successful!',
+    loginFailed: 'Login failed: ',
+    networkError: 'Network or server error. Please try again later.',
   },
 };
 
@@ -53,7 +54,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   // Состояния для полей ввода
-  const [email, setEmail] = useState(''); // Переименовано в 'email' для ясности
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   // Состояние для ошибок валидации на клиенте
@@ -90,7 +91,7 @@ function LoginPage() {
     const newErrors = {};
     if (!email.trim()) {
       newErrors.email = t.emailRequired;
-    } else if (!/\S+@\S+\.\S+/.test(email.trim())) { // Добавлена проверка формата email
+    } else if (!/\S+@\S+\.\S+/.test(email.trim())) {
       newErrors.email = t.invalidEmailFormat;
     }
 
@@ -115,7 +116,7 @@ function LoginPage() {
 
     if (isValid) {
       const credentials = {
-        email: email.trim(), // Отправляем только email
+        email: email.trim(),
         password: password.trim(),
       };
 
@@ -135,7 +136,9 @@ function LoginPage() {
           setIsSuccess(true);
           setShowServerMessageBlock(true);
 
-          console.log('Успешный вход, данные пользователя:', data.user);
+          // ДОБАВЛЕНО: Консольный вывод объекта пользователя, полученного с сервера
+          console.log('Данные пользователя, полученные с сервера после входа:', data.user);
+
           localStorage.setItem('loggedInUser', JSON.stringify(data.user));
           navigate('main'); // Переход на главную страницу после успешного входа
         } else {
@@ -171,16 +174,14 @@ function LoginPage() {
           <div className="login-content-block">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                {/* Метка для поля email */}
                 <label htmlFor="email">{t.loginLabel}</label>
                 <input
                   type="text"
-                  id="email" // Изменен id на 'email'
+                  id="email"
                   placeholder={t.loginPlaceholder}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
-                {/* Отображение ошибки валидации email */}
                 {errors.email && <p className="client-error-message">{errors.email}</p>}
               </div>
 
@@ -193,7 +194,6 @@ function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                {/* Отображение ошибки валидации пароля */}
                 {errors.password && <p className="client-error-message">{errors.password}</p>}
               </div>
 
@@ -201,7 +201,6 @@ function LoginPage() {
                 {t.loginButton}
               </button>
 
-              {/* Блок серверного сообщения */}
               {serverMessage && showServerMessageBlock && (
                 <div className={isSuccess ? 'server-message-block success' : 'server-message-block error'}>
                   <p>{serverMessage}</p>
@@ -211,9 +210,7 @@ function LoginPage() {
             </form>
 
             <div className="login-links-container">
-              {/* Замена span на Link */}
               <div className="forgot-password">
-                {/* Используем Link для перехода на страницу сброса пароля */}
                 <Link to="/fp" className="forgot-password-link-text">
                   {t.forgotPassword}
                 </Link>

@@ -56,17 +56,42 @@ html, body {
       flex-shrink: 0; /* Предотвращаем сжатие */
   }
 
+  /* НОВЫЕ СТИЛИ ДЛЯ АВАТАРА */
+  .profile-avatar-display {
+      width: 40px; /* Размер контейнера аватара */
+      height: 40px; /* Размер контейнера аватара */
+      border-radius: 50%; /* Делает контейнер круглым */
+      overflow: hidden; /* Обрезает все, что выходит за круг */
+      flex-shrink: 0; /* Предотвращает сжатие аватара */
+      margin-right: 10px; /* Отступ справа от аватара */
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Небольшая тень для объема */
+      background-color: #e0e2e5; /* Фон для случая, если изображение еще не загружено */
+      display: flex; /* Для центрирования заглушки, если она используется */
+      justify-content: center;
+      align-items: center;
+  }
+
+  .profile-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Обрезает изображение, чтобы оно заполнило круг без искажений */
+      display: block; /* Убирает лишний отступ под изображением */
+  }
+
+  /* УДАЛЯЕМ старый .profile-icon, так как он больше не нужен */
+  /*
   .profile-icon {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #e0e2e5; /* Светлый фон для иконки */
+      background-color: #e0e2e5;
       display: flex;
       justify-content: center;
       align-items: center;
       margin-right: 10px;
       flex-shrink: 0;
   }
+  */
 
   .profile-info {
       display: flex;
@@ -182,7 +207,7 @@ html, body {
       flex-direction: column;
       align-items: center; /* Центрируем поиск и идеи по горизонтали */
       width: 100%; /* Занимает всю доступную ширину родителя */
-      margin-bottom: 15px;
+      margin-bottom: 5px; /* Отступ снизу уменьшен */
   }
 
   /* Фильтр */
@@ -381,11 +406,20 @@ html, body {
     gap: 15px;
     overflow-y: visible;
     height: auto;
+    /* УДАЛЕНО: Плавный переход для содержимого, так как он вызывает затемнение и подергивания */
+    /* transition: opacity 0.3s ease-in-out; */
   }
+
+  /* УДАЛЕНО: Стиль для скрытия сетки во время загрузки */
+  /*
+  .ideas-grid.loading-fade {
+    opacity: 0.4;
+  }
+  */
 
   .idea-tile {
     width: 100%;
-    background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(5px);
     border-radius: 6px;
     padding: 5px 10px;
@@ -393,9 +427,10 @@ html, body {
     transition: all 0.2s ease;
     min-height: 40px;
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Изначальное направление для главной страницы */
     justify-content: space-between;
     align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Добавляем тонкую рамку для "толщины" */
   }
 
   .idea-tile:hover {
@@ -418,6 +453,95 @@ html, body {
     font-size: 12px;
     flex-shrink: 0;
   }
+
+
+  /* НОВЫЕ СТИЛИ ДЛЯ БЛОКОВ КОМАНД (team-tile) */
+  .team-tile {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    border-radius: 6px;
+    padding: 5px 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    min-height: 40px;
+    display: flex;
+    flex-direction: row; /* Все в одну строку */
+    align-items: center; /* Выравниваем по центру по вертикали */
+    justify-content: space-between; /* Распределяем элементы по ширине */
+    gap: 10px; /* Промежуток между элементами в строке */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Добавляем тонкую рамку для "толщины" */
+  }
+
+  .team-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .team-content-row { /* Новый контейнер для всех элементов в одной строке */
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Занимает все доступное пространство */
+    gap: 10px; /* Промежуток между элементами */
+  }
+
+  .team-status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .team-name {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    flex-grow: 1;
+    word-break: break-word;
+    white-space: nowrap; /* Предотвращаем перенос названия */
+    overflow: hidden; /* Скрываем переполнение */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+  }
+
+  .team-menu-dots {
+    cursor: pointer;
+    color: #555;
+    flex-shrink: 0;
+  }
+
+  /* Стили для бейджей статуса */
+  .team-status-badge {
+    padding: 3px 8px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    white-space: nowrap;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .status-in-progress {
+    background-color: #8a2be2; /* Фиолетовый */
+  }
+
+  .status-in-search {
+    background-color: #ff6b6b; /* Красный */
+  }
+
+  .team-detail-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 12px;
+    color: #555;
+    flex-shrink: 0;
+  }
+
+  .team-members {
+    font-weight: bold;
+  }
+
 
   /* Пагинация */
   .pagination-container {
@@ -487,7 +611,7 @@ html, body {
     max-width: 500px;
   }
 
-   .right-sidebar {
+    .right-sidebar {
       display: none;
   }
 
@@ -606,7 +730,7 @@ html, body {
     }
 
     .search-ideas-container {
-        margin-bottom: 10px;
+        margin-bottom: 0px; /* Отступ снизу уменьшен до 0 */
     }
 
     .filter-container {
@@ -615,7 +739,7 @@ html, body {
 
     .filters-container {
         padding: 8px;
-         /* ИСПРАВЛЕНО: Уменьшаем минимальную высоту для очень маленьких экранов */
+        /* ИСПРАВЛЕНО: Уменьшаем минимальную высоту для очень маленьких экранов */
         min-height: 200px;
         /* ИСПРАВЛЕНО: Убираем align-items: center; отсюда */
         /* align-items: center; */
@@ -623,7 +747,7 @@ html, body {
 
     .filters-title {
         font-size: 13px;
-         /* ИСПРАВЛЕНО: Добавляем выравнивание по левому краю для заголовка */
+        /* ИСПРАВЛЕНО: Добавляем выравнивание по левому краю для заголовка */
         align-self: flex-start;
     }
 
@@ -647,13 +771,13 @@ html, body {
     }
 
     .reset-filters-button {
-        width: 70%; /* ИСПРАВЛЕНО: Уменьшаем ширину кнопки */
+        width: 70%; /* Уменьшаем ширину кнопки */
         font-size: 14px;
         padding: 4px 0; /* Уменьшаем padding */
-         /* ИСПРАВЛЕНО: Закругляем углы кнопки сброса фильтров */
+        /* ИСПРАВЛЕНО: Закругляем углы кнопки сброса фильтров */
         border-radius: 20px; /* Установите желаемое значение скругления */
-         box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Добавляем тень */
-         margin: 10px auto 0 auto; /* ИСПРАВЛЕНО: Центрируем кнопку */
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08); /* Добавляем тень */
+        margin: 10px auto 0 auto; /* ИСПРАВЛЕНО: Центрируем кнопку */
     }
 
     .reset-filters-button:hover {
@@ -680,17 +804,38 @@ html, body {
         font-size: 18px;
     }
 
-    .idea-tile {
-        padding: 4px 8px;
+    /* НОВЫЕ СТИЛИ ДЛЯ БЛОКОВ КОМАНД (team-tile) */
+    .team-tile {
+      padding: 4px 8px;
+      gap: 8px; /* Уменьшаем промежуток */
     }
 
-    .idea-title {
-        font-size: 13px;
+    .team-content-row {
+      gap: 8px; /* Уменьшаем промежуток */
     }
 
-    .idea-date {
-        font-size: 11px;
+    .team-status-icon {
+      /* Размер иконки может быть уменьшен, если нужно */
     }
+
+    .team-name {
+      font-size: 13px;
+    }
+
+    .team-menu-dots {
+      /* Размер иконки может быть уменьшен, если нужно */
+    }
+
+    .team-status-badge {
+      padding: 2px 6px;
+      border-radius: 12px;
+      font-size: 9px;
+    }
+
+    .team-detail-item {
+      font-size: 11px;
+    }
+
 
     .pagination-container {
         margin-top: 10px;

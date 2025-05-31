@@ -139,7 +139,7 @@ html, body {
       flex-direction: column;
       align-items: flex-start; /* Выравниваем поиск и идеи по левому краю центральной колонки */
       width: 100%; /* Занимает всю доступную ширину родителя */
-      margin-bottom: 20px; /* Отступ снизу */
+      margin-bottom: 10px; /* Отступ снизу уменьшен */
   }
 
   /* Поисковик */
@@ -208,44 +208,172 @@ html, body {
     gap: 20px; /* Увеличиваем расстояние между плитками */
     overflow-y: visible;
     height: auto;
+    /* УДАЛЕНО: Плавный переход для содержимого, так как он вызывает затемнение и подергивания */
+    /* transition: opacity 0.3s ease-in-out; */
   }
 
+  /* УДАЛЕНО: Стиль для скрытия сетки во время загрузки */
+  /*
+  .ideas-grid.loading-fade {
+    opacity: 0.4;
+  }
+  */
+
+  /* Стили для блоков идей на главной странице (IdeasGrid) */
   .idea-tile {
     width: 100%;
-    background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(5px);
-    border-radius: 8px; /* Увеличиваем скругление углов */
-    padding: 12px 20px; /* Увеличиваем внутренние отступы */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Увеличиваем тень */
+    border-radius: 8px;
+    padding: 12px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
     transition: all 0.2s ease;
-    min-height: 50px; /* Увеличиваем минимальную высоту */
+    min-height: 50px;
     display: flex;
-    flex-direction: row;
+    flex-direction: row; /* Изначальное направление для главной страницы */
     justify-content: space-between;
     align-items: center;
-    border: 1px solid rgba(0, 0, 0, 0.1); /* Добавляем тонкую рамку для "толщины" */
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .idea-tile:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* Увеличиваем тень при наведении */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
 
   .idea-title {
     margin: 0;
     color: #333;
-    font-size: 18px; /* Размер шрифта для десктопа */
-    font-weight: 700; /* Увеличиваем толщину шрифта */
+    font-size: 18px;
+    font-weight: 700;
     flex-grow: 1;
-    margin-right: 15px; /* Увеличиваем отступ справа */
+    margin-right: 15px;
     word-break: break-word;
   }
 
   .idea-date {
-    color: #555; /* Делаем цвет немного темнее */
-    font-size: 15px; /* Размер шрифта для десктопа */
+    color: #555;
+    font-size: 15px;
     flex-shrink: 0;
   }
+
+
+  /* НОВЫЕ СТИЛИ ДЛЯ БЛОКОВ КОМАНД (team-tile) */
+  .team-tile {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    padding: 12px 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    transition: all 0.2s ease;
+    min-height: 60px; /* Увеличиваем минимальную высоту */
+    display: flex;
+    flex-direction: row; /* Все в одну строку */
+    align-items: center; /* Выравниваем по центру по вертикали */
+    justify-content: space-between; /* Распределяем элементы по ширине */
+    gap: 15px; /* Промежуток между элементами в строке */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .team-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  }
+
+  .team-content-row { /* Новый контейнер для всех элементов в одной строке */
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Занимает все доступное пространство */
+    gap: 15px; /* Промежуток между элементами */
+  }
+
+  .team-status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Предотвращаем сжатие иконки */
+  }
+
+  .team-name {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 700;
+    flex-grow: 1; /* Название занимает оставшееся пространство */
+    word-break: break-word;
+    white-space: nowrap; /* Предотвращаем перенос названия */
+    overflow: hidden; /* Скрываем переполнение */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+  }
+
+  .team-menu-dots {
+    cursor: pointer;
+    color: #555;
+    flex-shrink: 0; /* Предотвращаем сжатие иконки */
+  }
+
+  /* Стили для бейджей статуса */
+  .team-status-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+    white-space: nowrap;
+    text-transform: uppercase;
+    flex-shrink: 0; /* Предотвращаем сжатие бейджа */
+  }
+
+  .status-in-progress {
+    background-color: #8a2be2; /* Фиолетовый */
+  }
+
+  .status-in-search {
+    background-color: #ff6b6b; /* Красный */
+  }
+
+  .team-detail-item {
+    display: flex;
+    align-items: center;
+    white-space: nowrap; /* Предотвращаем перенос текста внутри элемента */
+    font-size: 14px;
+    color: #555;
+    flex-shrink: 0; /* Предотвращаем сжатие элемента */
+  }
+  .create-team-button {
+  background-color: #8a2be2; /* Фиолетовый цвет */
+  color: white;
+  border: none;
+  border-radius: 50%; /* Круглая форма */
+  width: 60px; /* Ширина */
+  height: 60px; /* Высота */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36px; /* Размер иконки */
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4); /* Тень */
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  /* НОВОЕ: Центрируем кнопку в правой боковой панели */
+  align-self: center; /* Выравнивает элемент по центру по поперечной оси (для flex-direction: column) */
+}
+.create-team-button:hover {
+  background-color: #7b1fa2; /* Темнее при наведении */
+  transform: translateY(-3px); /* Небольшой подъем */
+  box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
+}
+
+.create-team-button:active {
+  background-color: #6a1b9a; /* Еще темнее при нажатии */
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(138, 43, 226, 0.3);
+}
+
+
+  .team-members {
+    font-weight: bold; /* Выделяем количество участников */
+  }
+
 
   /* Пагинация */
   .pagination-container {
@@ -341,17 +469,42 @@ html, body {
       align-self: flex-end; /* Выравниваем элемент профиля по правому краю внутри flex-контейнера */
   }
 
+  /* НОВЫЕ СТИЛИ ДЛЯ АВАТАРА */
+  .profile-avatar-display {
+      width: 60px; /* УВЕЛИЧЕННЫЙ РАЗМЕР АВАТАРА */
+      height: 60px; /* УВЕЛИЧЕННЫЙ РАЗМЕР АВАТАРА */
+      border-radius: 50%; /* Делает контейнер круглым */
+      overflow: hidden; /* Обрезает все, что выходит за круг */
+      flex-shrink: 0; /* Предотвращает сжатие аватара */
+      margin-right: 15px; /* Увеличиваем отступ справа от аватара */
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Небольшая тень для объема */
+      background-color: #e0e2e5; /* Фон для случая, если изображение еще не загружено */
+      display: flex; /* Для центрирования заглушки, если она используется */
+      justify-content: center;
+      align-items: center;
+  }
+
+  .profile-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Обрезает изображение, чтобы оно заполнило круг без искажений */
+      display: block; /* Убирает лишний отступ под изображением */
+  }
+
+  /* УДАЛЯЕМ старый .profile-icon, так как он больше не нужен */
+  /*
   .profile-icon {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-color: #e0e2e5; /* Светлый фон для иконки */
+      background-color: #e0e2e5;
       display: flex;
       justify-content: center;
       align-items: center;
       margin-right: 10px;
       flex-shrink: 0;
   }
+  */
 
   .profile-info {
       display: flex;

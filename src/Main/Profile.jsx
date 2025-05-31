@@ -1,29 +1,32 @@
+// Profile.jsx
 import React from 'react';
-// Возможно, вам потребуется установить react-icons, если еще не сделали: npm install react-icons
-import { BiUserCircle } from 'react-icons/bi';
+// BiUserCircle больше не нужен, так как будет использоваться изображение
+// import { BiUserCircle } from 'react-icons/bi';
 
-// Компонент теперь принимает проп 'user'
-function Profile({ user }) {
-  // Извлекаем имя и фамилию из объекта user, предоставляя значения по умолчанию, если user или свойства не определены
-  const userName = user && user.name ? user.name : 'Загрузка...'; // Или 'Пользователь'
-  const userSurname = user && user.surname ? user.surname : ''; // Пустая строка, если фамилии нет
+// Компонент теперь принимает проп 'onProfileClick'
+function Profile({ user, onProfileClick }) {
+  const userName = user && user.name ? user.name : 'Загрузка...';
+  const userSurname = user && user.surname ? user.surname : '';
+  const userStatus = user ? (user.user_type_id === 1 ? 'Студент' : 'Преподаватель') : 'Статус';
 
-  // Вы можете определить статус пользователя на основе user_type_id или других данных из user
-  // Например:
-  const userStatus = user ? (user.user_type_id === 1 ? 'Студент' : 'Преподаватель') : 'Статус'; // Пример определения статуса
+  // Определяем URL аватара
+  // Если user.avatar_url существует и не начинается с 'http' (т.е. это относительный путь с сервера),
+  // то добавляем префикс 'http://localhost:5000'.
+  // В противном случае используем его как есть или заглушку.
+  const avatarSrc = user?.avatar_url
+    ? (user.avatar_url.startsWith('http') ? user.avatar_url : `http://localhost:5000${user.avatar_url}`)
+    : 'https://placehold.co/50x50/A0A0A0/FFFFFF?text=AVATAR'; // Заглушка для аватара
 
   return (
-    <div className="profile-container">
-      <div className="profile-icon">
-        {/* Иконка пользователя */}
-        <BiUserCircle size={30} color="#8a2be2" />
+    // Добавляем onClick обработчик, если он передан
+    <div className="profile-container" onClick={onProfileClick} style={{ cursor: onProfileClick ? 'pointer' : 'default' }}>
+      <div className="profile-avatar-display"> {/* Новый контейнер для аватара */}
+        <img src={avatarSrc} alt="Аватар пользователя" className="profile-avatar" />
       </div>
       <div className="profile-info">
-        {/* Отображаем имя и фамилию из пропсов */}
         <div className="profile-name">
           {`${userName} ${userSurname}`}
         </div>
-        {/* Отображаем статус из пропсов или определенный на основе user */}
         <div className="profile-status">{userStatus}</div>
       </div>
     </div>

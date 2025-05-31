@@ -33,8 +33,8 @@
   border-radius: 10px 0 0 10px;
   position: relative; /* Относительное позиционирование для дочерних элементов */
   /* Увеличиваем ширину для десктопа */
-  width: 50%; /* Установлена ширина на 50% */
-  max-width: 100%; /* На мобильных может занимать всю ширину */
+  width: 60%; /* Установлена ширина на 60% */
+  max-width: 800px; /* Максимальная ширина */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -136,6 +136,7 @@
 }
 
 
+
 .idea-section-inner h3 {
   margin: 0; /* Убираем внешний отступ у заголовка */
   color: #555;
@@ -166,7 +167,40 @@
   min-height: auto; /* Убедимся, что min-height auto */
   height: auto; /* Автоматическая высота */
 }
+.idea-section-inner input[type="number"] {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  box-sizing: border-box;
+  background-color: transparent;
+  outline: none;
+  min-height: auto;
+  height: auto;
+}
+.idea-section-inner.poll-row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
 
+.idea-section-inner .poll-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+.idea-section-inner input[type="number"]::-webkit-outer-spin-button,
+.idea-section-inner input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.idea-section-inner input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
 /* Контейнер для отображения овалов стека технологий */
 .tech-stack-items-container {
   display: flex;
@@ -174,7 +208,13 @@
   gap: 8px; /* Пространство между овалами */
   margin-top: 10px; /* Отступ сверху */
 }
-
+.styled-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #8a2be2;
+  border-radius: 4px;
+  border: 1px solid #8a2be2;
+}
 /* Стиль для отдельного овала стека технологий */
 .tech-stack-item {
   display: inline-flex; /* Используем flex для выравнивания текста и кнопки удаления */
@@ -263,22 +303,6 @@
   padding-right: 30px; /* Добавляем правый padding для места под кнопку */
 }
 
-.comment-author {
-  font-weight: bold;
-  color: #333;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.comment-text {
-  font-size: 14px;
-  color: #555;
-  word-break: break-word;
-}
-
-/* Стиль для кнопки удаления комментария - Внутри блока */
 .comment-item-delete {
   position: absolute; /* Абсолютное позиционирование */
   top: 5px; /* Сдвиг вниз от верхнего края */
@@ -343,6 +367,766 @@
 
 .add-comment-form button:hover {
   background-color: #7b1fa2;
+}
+
+/* --- Стили для ProfileEditModal --- */
+
+/* Стили для оверлея ProfileEditModal, чтобы он перекрывал IdeaCreationModal */
+.profile-edit-modal-overlay {
+    z-index: 1050; /* Должен быть выше, чем IdeaCreationModal (z-index: 1000) */
+}
+
+
+/* Общие стили для контента модального окна профиля */
+.profile-edit-modal-content {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px 0 0 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    overflow-y: auto;
+    width: 60%; /* Ширина для десктопа (шире, чем IdeaCreationModal) */
+    max-width: 800px; /* Максимальная ширина */
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Заголовок профиля */
+.profile-edit-header-block {
+    text-align: center;
+    padding: 0 50px; /* Отступы, чтобы текст не наезжал на кнопки */
+    display: flex; /* Используем flexbox для выравнивания аватара и текста */
+    align-items: center; /* Выравниваем элементы по центру по вертикали */
+    justify-content: center; /* Центрируем содержимое */
+    gap: 20px; /* Промежуток между аватаром и текстом */
+}
+
+.profile-edit-header-block h2 {
+    margin: 0;
+    font-size: 28px; /* Увеличенный шрифт */
+    color: #333;
+    word-break: break-word; /* Перенос слов */
+}
+
+/* НОВЫЕ СТИЛИ ДЛЯ АВАТАРА */
+.profile-avatar-wrapper {
+    position: relative;
+    width: 100px; /* Размер круга аватара */
+    height: 100px; /* Размер круга аватара */
+    border-radius: 50%; /* Делаем круглым */
+    overflow: hidden; /* Обрезаем все, что выходит за круг */
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Небольшая тень */
+    flex-shrink: 0; /* Не сжимать аватар */
+}
+
+.profile-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Обрезаем изображение, чтобы оно заполнило круг */
+    display: block; /* Убираем лишний отступ под изображением */
+}
+
+.profile-avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Затемненный фон при наведении */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Изначально скрыт */
+    transition: opacity 0.2s ease;
+}
+
+.profile-avatar-wrapper:hover .profile-avatar-overlay {
+    opacity: 1; /* Показываем при наведении */
+}
+
+.profile-avatar-edit-icon {
+    color: white; /* Белая иконка карандаша */
+}
+
+
+/* Контейнер для основных блоков (информация, компетенции, идеи, портфолио) */
+.profile-edit-main-content {
+    display: flex;
+    gap: 20px; /* Промежуток между левой и правой колонками */
+    flex-wrap: wrap; /* Позволяет колонкам переноситься на мобильных */
+}
+
+/* Левая колонка: Изменение информации */
+.profile-info-block {
+    flex: 1; /* Занимает доступное пространство */
+    min-width: 300px; /* Минимальная ширина для блока */
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-info-block h3 {
+    margin-top: 0;
+    color: #555;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Добавлена линия */
+    padding-bottom: 10px; /* Отступ до линии */
+    margin-bottom: 15px; /* Отступ после линии */
+}
+
+.profile-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile-input-group label {
+    font-size: 14px;
+    color: #666;
+    font-weight: bold;
+}
+
+/* Контейнер для инпута и кнопки */
+.input-with-edit-button {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Промежуток между инпутом и кнопкой */
+    width: 100%;
+}
+
+.profile-input-group input {
+    flex-grow: 1; /* Инпут занимает все доступное пространство */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: all 0.2s; /* Анимация для всех свойств */
+}
+
+.profile-input-group input:focus {
+    outline: none;
+    border-color: #8a2be2;
+}
+
+.profile-input-group input.read-only {
+    background-color: #f5f5f5; /* Светло-серый фон для нередактируемых полей */
+    cursor: default;
+}
+
+.edit-field-button {
+    background-color: #8a2be2; /* Фиолетовый цвет */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 36px; /* Фиксированный размер кнопки */
+    height: 36px; /* Фиксированный размер кнопки */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0; /* Не сжимать кнопку */
+}
+
+.edit-field-button:hover {
+    background-color: #7b1fa2;
+}
+
+
+/* Правая колонка: Компетенции, Идеи, Портфолио */
+.profile-additional-blocks {
+    flex: 2; /* Занимает больше пространства */
+    min-width: 300px; /* Минимальная ширина */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Блок Компетенции */
+.profile-competencies-block {
+    background: #e0ccff; /* Светло-фиолетовый фон */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: row; /* Располагаем колонки в ряд */
+    flex-wrap: wrap; /* Позволяет колонкам переноситься на новую строку */
+    justify-content: space-between; /* Распределяет колонки по ширине с равными промежутками */
+    align-items: flex-start; /* Выравнивает колонки по верху */
+    gap: 15px; /* Промежуток между колонками */
+}
+
+.profile-competencies-block h3 {
+    margin-top: 0;
+    color: #555;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%; /* Заголовок занимает всю ширину */
+    border-bottom: 1px solid #ddd; /* Добавлена линия */
+    padding-bottom: 10px; /* Отступ до линии */
+    margin-bottom: 15px; /* Отступ после линии */
+}
+
+/* Новый стиль для колонок компетенций */
+.competencies-column {
+    display: flex;
+    flex-direction: column; /* Элементы внутри колонки располагаются в столбец */
+    gap: 15px; /* Промежуток между выпадающими списками внутри колонки */
+    flex-basis: calc(50% - 7.5px); /* Занимает почти половину ширины, учитывая gap */
+    box-sizing: border-box; /* Важно для корректного расчета ширины */
+    min-width: 150px; /* Минимальная ширина для каждой колонки */
+}
+
+/* Контейнер для каждой группы выпадающих списков */
+.competency-dropdown-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    box-sizing: border-box; /* Важно для корректного расчета ширины */
+}
+
+
+.competency-dropdown-group label {
+    font-size: 13px; /* Меньший шрифт для лейбла */
+    color: #666;
+    font-weight: bold;
+}
+
+/* Стили для стандартных select (если бы они использовались) */
+.competency-dropdown-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 10px;
+    transition: border-color 0.2s;
+}
+
+.competency-dropdown-group select:focus {
+    outline: none;
+    border-color: #8a2be2;
+}
+
+/* --- Стили для MultiSelectDropdown.jsx --- */
+.multi-select-dropdown {
+    position: relative;
+    width: 100%;
+    background: #fff; /* Белый фон для компонента */
+    padding: 10px; /* Внутренний отступ */
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box; /* Учитываем padding и border в ширине */
+}
+
+.multi-select-label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.multi-select-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white;
+    transition: border-color 0.2s;
+}
+
+.multi-select-header:hover {
+    border-color: #8a2be2;
+}
+
+.multi-select-display-value {
+    flex-grow: 1;
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.multi-select-arrow {
+    transition: transform 0.2s ease;
+}
+
+.multi-select-arrow.open {
+    transform: rotate(180deg);
+}
+
+.multi-select-options {
+    position: absolute;
+    top: 100%; /* Располагаем под заголовком */
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Чтобы был поверх других элементов */
+    max-height: 200px; /* Ограничиваем высоту для прокрутки */
+    overflow-y: auto;
+    margin-top: 5px; /* Небольшой отступ от заголовка */
+}
+
+.multi-select-option {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.multi-select-option:hover {
+    background-color: #f0f0f0;
+}
+
+.multi-select-option.selected {
+    background-color: #e0ccff; /* Светло-фиолетовый фон для выбранных */
+    font-weight: bold;
+    color: #333;
+}
+
+.multi-select-checkbox-icon {
+    margin-right: 8px;
+    color: transparent; /* Скрываем галочку по умолчанию */
+}
+
+.multi-select-option.selected .multi-select-checkbox-icon {
+    color: #8a2be2; /* Показываем галочку для выбранных */
+}
+
+.multi-select-no-options {
+    padding: 10px;
+    color: #888;
+    text-align: center;
+    font-size: 14px;
+}
+
+
+/* Блок Идеи и Портфолио - общие стили */
+.profile-ideas-block,
+.profile-portfolio-block {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-ideas-block h3,
+.profile-portfolio-block h3 {
+    margin-top: 0;
+    color: #555;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%; /* Заголовок занимает всю ширину */
+    border-bottom: 1px solid #ddd; /* Добавлена линия */
+    padding-bottom: 10px; /* Отступ до линии */
+    margin-bottom: 15px; /* Отступ после линии */
+}
+
+.placeholder-block {
+    background-color: #f0f0f0; /* Серый фон для заполнителя */
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+/* Портфолио - поиск */
+.portfolio-search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.portfolio-search-input:focus {
+    outline: none;
+    border-color: #8a2be2;
+}
+
+
+/* Блок результатов тестирования */
+.profile-test-results-block {
+    background: #e0ccff; /* Светло-фиолетовый фон */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-test-results-block h3 {
+    margin-top: 0;
+    color: #555;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%; /* Заголовок занимает всю ширину */
+    border-bottom: 1px solid #ddd; /* Добавлена линия */
+    padding-bottom: 10px; /* Отступ до линии */
+    margin-bottom: 15px; /* Отступ после линии */
+}
+
+.test-table-placeholder {
+    background: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+}
+
+.test-table-placeholder h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 16px;
+    border-bottom: 1px solid #eee; /* Более светлая линия для подзаголовков */
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+.team-details-modal-overlay {
+  /* Стили оверлея, если нужны специфичные, иначе наследуются от .modal-overlay */
+  z-index: 1020; /* Убедимся, что поверх других модальных окон, если они могут быть одновременно */
+}
+
+.team-details-modal-content {
+  /* Общие стили для контента модального окна, наследуются от .modal-content */
+  /* Можно переопределить ширину, если нужно */
+  width: 75%; /* Шире, чем ProfileEditModal */
+  max-width: 1000px; /* Максимальная ширина */
+  /* background: #f0f2f5; /* Немного другой фон для отличия, если нужно */
+}
+
+.team-details-header {
+  text-align: center;
+  padding: 10px 50px 20px; /* Отступы, чтобы текст не наезжал на кнопку "Назад" */
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.team-details-header h2 {
+  margin: 0;
+  font-size: 26px;
+  color: #333;
+  font-weight: 600;
+}
+
+.team-details-body.full-width-layout {
+  display: flex;
+  flex-direction: column; /* Все секции теперь идут в столбец */
+  gap: 20px; /* Промежуток между секциями */
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0 10px;
+}
+
+
+
+.team-details-section {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+}
+
+.team-details-section h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #444;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.full-width-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* Описание команды */
+.team-description-section p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #555;
+  white-space: pre-wrap; /* Сохраняет пробелы и переносы строк из текста */
+  max-height: 200px; /* Ограничение высоты для описания */
+  overflow-y: auto; /* Прокрутка, если описание длинное */
+  padding-right: 10px; /* Отступ для скроллбара */
+}
+
+/* Участники команды */
+.member-search-container {
+  position: relative;
+  margin-bottom: 15px;
+  /* display: flex; /* Удаляем flex */
+  /* align-items: center; /* Удаляем align-items */
+  /* gap: 10px; /* Удаляем gap */
+}
+
+.member-search-input {
+  width: 100%; /* Возвращаем 100% ширину */
+  padding: 10px 15px 10px 35px; /* Отступ слева для иконки */
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.member-search-input:focus {
+  outline: none;
+  border-color: #8a2be2;
+}
+
+/* Возвращаем старый member-search-icon */
+.member-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 18px;
+}
+
+/* Удаляем новый стиль для кнопки поиска участников */
+/*
+.member-search-button {
+  background-color: #E0E0E0;
+  color: #333;
+  border: none;
+  border-radius: 9999px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.member-search-button:hover {
+  background-color: #C0C0C0;
+}
+
+.member-search-button:active {
+  background-color: #A0A0A0;
+}
+*/
+
+
+.members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 250px; /* Ограничение высоты списка участников */
+  overflow-y: auto;
+  padding-right: 10px; /* Отступ для скроллбара */
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 10px;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-grow: 1;
+  overflow: hidden; /* Для text-overflow */
+}
+
+.member-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-email {
+  font-size: 13px;
+  color: #777;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-role {
+  font-size: 13px;
+  color: #6a0dad; /* Темно-фиолетовый текст */
+  background-color: #e0ccff; /* Светло-фиолетовый фон */
+  padding: 4px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0; /* Чтобы роль не сжималась */
+}
+.member-item-empty {
+  text-align: center;
+  color: #888;
+  padding: 20px;
+  font-style: italic;
+}
+
+
+/* Подача заявки */
+.team-apply-section { /* Теперь это full-width-section */
+  text-align: center;
+}
+
+/* Обновленные стили для кнопки "Подать заявку" */
+.apply-button-custom {
+  border-radius: 9999px; /* Сделано более округлым */
+  background-color: #E0E0E0; /* Приглушенный серый фон */
+  color: #333; /* Темный текст для контраста */
+  display: block; /* Кнопка будет блочным элементом */
+  margin: 0 auto; /* Центрируем кнопку */
+  padding: 12px 30px; /* Увеличиваем горизонтальный padding для лучшего вида без иконки */
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.apply-button-custom:hover {
+  background-color: #C0C0C0; /* Эффект при наведении */
+}
+
+.apply-button-custom:active {
+  background-color: #A0A0A0; /* Эффект при нажатии */
+}
+
+/* Удаляем старые стили apply-button, если они были */
+/*
+.apply-button {
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.apply-button:hover {
+  background-color: #7b1fa2;
+}
+
+.apply-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+*/
+
+
+
+.info-grid-horizontal {
+  display: flex; /* Используем flexbox для горизонтального расположения */
+  flex-wrap: wrap; /* Позволяем блокам переноситься, если не помещаются */
+  gap: 15px; /* Промежуток между информационными блоками */
+  justify-content: space-around; /* Распределяем блоки */
+}
+/* Информация о команде (правая колонка) */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* По умолчанию одна колонка */
+  gap: 15px;
+}
+
+.info-block {
+  display: flex;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 6px;
+  gap: 12px;
+}
+
+.info-icon {
+  font-size: 22px;
+  color: #8a2be2;
+  flex-shrink: 0;
+}
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.info-label {
+  font-size: 13px;
+  color: #777;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.info-value.competencies-value {
+  white-space: normal; /* Разрешаем перенос для компетенций */
+}
+
+
+.info-block-full-width {
+  grid-column: 1 / -1; /* Растягиваем на всю ширину грида */
 }
 
 /* Медиа-запрос для мобильных устройств */
@@ -477,5 +1261,296 @@
   .add-comment-form button {
     width: 35px;
     height: 35px;
+  }
+
+  /* --- Стили для ProfileEditModal (мобильные) --- */
+
+  .profile-edit-modal-content {
+      width: 100%; /* На мобильных на всю ширину */
+      border-radius: 0; /* Убираем скругление на мобильных */
+      padding: 15px; /* Уменьшаем padding */
+  }
+
+  .profile-edit-header-block {
+      padding: 0; /* Убираем горизонтальные отступы */
+      flex-direction: column; /* На мобильных аватар и текст будут в колонку */
+      gap: 10px; /* Меньший промежуток */
+  }
+
+  .profile-edit-header-block h2 {
+      font-size: 20px; /* Меньший шрифт для заголовка */
+  }
+
+  .profile-avatar-wrapper {
+      width: 80px; /* Меньший размер аватара на мобильных */
+      height: 80px; /* Меньший размер аватара на мобильных */
+  }
+
+  .profile-avatar-edit-icon {
+      font-size: 20px; /* Меньший размер иконки на мобильных */
+  }
+
+  .profile-edit-main-content {
+      flex-direction: column; /* Элементы в столбец */
+      gap: 15px;
+  }
+
+  .profile-info-block {
+      min-width: unset; /* Убираем минимальную ширину */
+      gap: 10px;
+  }
+
+  .profile-info-block h3 {
+      font-size: 16px;
+      padding-bottom: 8px; /* Отступ до линии */
+      margin-bottom: 12px; /* Отступ после линии */
+  }
+
+  .profile-input-group label {
+      font-size: 12px;
+  }
+
+  .profile-input-group input {
+      padding: 8px;
+      font-size: 14px;
+  }
+
+  /* Мобильные стили для кнопок редактирования полей */
+  .edit-field-button {
+      width: 30px; /* Меньший размер кнопки на мобильных */
+      height: 30px; /* Меньший размер кнопки на мобильных */
+  }
+
+  .profile-additional-blocks {
+      min-width: unset; /* Убираем минимальную ширину */
+      gap: 15px;
+  }
+
+  .profile-competencies-block,
+  .profile-ideas-block,
+  .profile-portfolio-block {
+      padding: 15px;
+      gap: 10px;
+  }
+
+  .profile-competencies-block h3,
+  .profile-ideas-block h3,
+  .profile-portfolio-block h3 {
+      font-size: 16px;
+      padding-bottom: 8px; /* Отступ до линии */
+      margin-bottom: 12px; /* Отступ после линии */
+  }
+
+  /* Мобильные стили для MultiSelectDropdown */
+  .multi-select-dropdown {
+      padding: 8px; /* Уменьшаем padding для мобильных */
+  }
+  .multi-select-label {
+      font-size: 11px; /* Меньший шрифт для лейбла на мобильных */
+  }
+  .multi-select-display-value {
+      font-size: 12px; /* Меньший шрифт для отображаемого значения */
+  }
+  .multi-select-option {
+      padding: 6px 8px; /* Меньший padding для опций */
+      font-size: 12px;
+  }
+
+
+  .placeholder-block {
+      padding: 10px;
+      font-size: 12px;
+  }
+
+  .portfolio-search-input {
+      padding: 8px;
+      font-size: 12px;
+  }
+
+  .profile-test-results-block {
+      padding: 15px;
+      gap: 10px;
+  }
+
+  .profile-test-results-block h3 {
+      font-size: 16px;
+      padding-bottom: 8px; /* Отступ до линии */
+      margin-bottom: 12px; /* Отступ после линии */
+  }
+
+  .test-table-placeholder {
+      padding: 10px;
+      font-size: 12px;
+  }
+
+  .test-table-placeholder h4 {
+      font-size: 14px;
+      border-bottom: 1px solid #eee; /* Более светлая линия для подзаголовков */
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+  }
+
+  .team-details-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-title {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.team-description p {
+  background: #f8f8f8;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.member-search-input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.members-list {
+  list-style: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.member-item {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.member-item:last-child {
+  border-bottom: none;
+}
+
+.member-email {
+  color: #666;
+  font-size: 12px;
+  display: block;
+}
+
+.member-role {
+  font-size: 12px;
+  color: #999;
+}
+
+.apply-button {
+  background-color: #8a2be2;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.apply-button:hover {
+  background-color: #7b1fa2;
+}
+
+.team-info .info-row {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.info-block {
+  flex: 1 1 45%;
+  background: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.team-details-modal-content {
+    width: 95%;
+    max-width: 95%;
+    padding: 15px;
+  }
+
+  .team-details-header {
+    padding: 5px 40px 15px; /* Уменьшаем отступы */
+  }
+  .team-details-header h2 {
+    font-size: 20px;
+  }
+
+  .team-details-body {
+    flex-direction: column; /* Колонки в столбец на мобильных */
+    gap: 15px;
+    padding: 0 5px;
+  }
+
+  .team-details-left-column,
+  .team-details-right-column {
+    width: 100%;
+  }
+
+  .team-details-section {
+    padding: 15px;
+  }
+  .team-details-section h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+
+  .team-description-section p {
+    font-size: 14px;
+    max-height: 150px; /* Уменьшаем высоту на мобильных */
+  }
+
+  .member-search-input {
+    padding: 8px 8px 8px 30px;
+    font-size: 13px;
+  }
+  /* Возвращаем старые стили для member-search-icon */
+  .member-search-icon {
+    font-size: 16px;
+  }
+  .members-list {
+    max-height: 200px; /* Уменьшаем высоту на мобильных */
+  }
+  .member-item {
+    padding: 10px 0;
+  }
+  .member-name {
+    font-size: 14px;
+  }
+  .member-email, .member-role {
+    font-size: 12px;
+  }
+  .member-role {
+    padding: 3px 6px;
+  }
+
+  .apply-button {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  .info-grid {
+    gap: 10px;
+  }
+  .info-block {
+    padding: 12px;
+    gap: 10px;
+  }
+  .info-icon {
+    font-size: 20px;
+  }
+  .info-label {
+    font-size: 12px;
+  }
+  .info-value {
+    font-size: 14px;
   }
 }

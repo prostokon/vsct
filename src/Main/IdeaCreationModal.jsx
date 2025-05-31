@@ -136,21 +136,28 @@ function IdeaCreationModal({ onClose, currentUser }) {
   };
 
   // Обработчик сохранения идеи (здесь пока просто вывод в консоль)
-  const handleSaveIdea = () => {
+const handleSaveIdea = async () => {
+  try {
     const newIdea = {
       title: ideaTitle,
-      problem: problem,
-      solution: solution,
-      result: result,
-      resources: resources,
-      // Сохраняем список объектов стека технологий
-      techStack: techStackItems,
-      comments: commentsList
+      problem_description: problem,
+      proposed_solution: solution,
+      resources_needed: resources,
+      tech_stack: techStackItems.map(item => item.name),
+      comments: commentsList.map(c => `${c.author}: ${c.text}`)
     };
-    console.log('Новая идея:', newIdea);
-    // В реальном приложении здесь будет отправка данных на сервер
-    handleCloseWithAnimation(); // Вызываем новую функцию закрытия
-  };
+    const response = await fetch('http://localhost:5000/api/ideas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newIdea)
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Ошибка создания идеи');
+    handleCloseWithAnimation();
+  } catch (err) {
+    alert(err.message || 'Ошибка при создании идеи');
+  }
+};
 
   return (
     <div className="modal-overlay" onClick={handleCloseWithAnimation}>
