@@ -138,14 +138,15 @@ function IdeaCreationModal({ onClose, currentUser }) {
   // Обработчик сохранения идеи (здесь пока просто вывод в консоль)
 const handleSaveIdea = async () => {
   try {
-    const newIdea = {
-      title: ideaTitle,
-      problem_description: problem,
-      proposed_solution: solution,
-      resources_needed: resources,
-      tech_stack: techStackItems.map(item => item.name),
-      comments: commentsList.map(c => `${c.author}: ${c.text}`)
-    };
+const newIdea = {
+  user_id: currentUser?.id, 
+  title: ideaTitle,
+  problem_description: problem,
+  proposed_solution: solution,
+  resources_needed: resources,
+  tech_stack: techStackItems.map(item => item.name),
+  comments: commentsList.map(c => `${c.author}: ${c.text}`)
+};
     const response = await fetch('http://localhost:5000/api/ideas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

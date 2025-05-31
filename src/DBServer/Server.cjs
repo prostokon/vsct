@@ -583,6 +583,7 @@ app.get('/api/teams', async (req, res) => {
 app.post('/api/ideas', async (req, res) => {
   try {
     const {
+      user_id,
       title,
       problem_description,
       proposed_solution,
@@ -590,13 +591,13 @@ app.post('/api/ideas', async (req, res) => {
       tech_stack,
       comments
     } = req.body;
-    if (!title) {
-      return res.status(400).json({ error: 'Название идеи обязательно.' });
+    if (!title || !user_id) {
+      return res.status(400).json({ error: 'Название идеи и user_id обязательны.' });
     }
-    // comments должен быть массивом строк (например, ["Имя: текст", ...])
     const commentsArray = Array.isArray(comments) ? comments : [];
     const result = await pool.query(
       `INSERT INTO ideas (
+        user_id,
         title,
         status,
         state,
@@ -605,12 +606,13 @@ app.post('/api/ideas', async (req, res) => {
         resources_needed,
         tech_stack,
         comments
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8::text[])
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::text[])
       RETURNING *;`,
       [
+        user_id,
         title,
-        'На согласовании', // статус по умолчанию
-        'Новая',           // состояние по умолчанию
+        'На согласовании',
+        'Новая',
         problem_description || null,
         proposed_solution || null,
         resources_needed || null,
