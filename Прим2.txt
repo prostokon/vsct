@@ -1,0 +1,415 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+// Устанавливаем локализацию для корректного отображения валюты
+using System.Globalization; 
+using System.Threading;
+
+// -----------------------------------------------------
+// 1. Интерфейсы
+// -----------------------------------------------------
+
+/// <summary>
+/// Интерфейс, определяющий метод для установки компонента.
+/// </summary>
+public interface IInstallable
+{
+    void Install();
+}
+
+// -----------------------------------------------------
+// 2. Базовый Абстрактный Класс
+// -----------------------------------------------------
+
+/// <summary>
+/// Базовый абстрактный класс для всех компонентов компьютера.
+/// Демонстрирует общие свойства и методы (полиморфизм).
+/// </summary>
+public abstract class Component
+{
+    // Общие свойства
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+
+    public Component(string name, decimal price)
+    {
+        Name = name;
+        Price = price;
+    }
+
+    // 1. Создание виртуального метода GetInfo() для демонстрации переопределения (полиморфизм)
+    /// <summary>
+    /// Возвращает общую информацию о компоненте.
+    /// </summary>
+    public virtual string GetInfo()
+    {
+        // Демонстрация полиморфизма
+        return $"[Общий Компонент] {Name} | Цена: {Price:C}";
+    }
+
+    // 2. Переопределение оператора ToString()
+    public override string ToString()
+    {
+        // Переопределение для удобного вывода информации
+        return $"| Компонент: {Name} | Тип: {GetType().Name} | Цена: {Price:C} |";
+    }
+    
+    // Перегрузка оператора == для сравнения компонентов
+    public static bool operator ==(Component c1, Component c2)
+    {
+        if (ReferenceEquals(c1, c2))
+        {
+            return true;
+        }
+        if (ReferenceEquals(c1, null) || ReferenceEquals(c2, null))
+        {
+            return false;
+        }
+        // Сравнение по имени, цене и типу (для точного определения)
+        return c1.Name == c2.Name && c1.Price == c2.Price && c1.GetType() == c2.GetType();
+    }
+
+    // Перегрузка оператора !=
+    public static bool operator !=(Component c1, Component c2)
+    {
+        return !(c1 == c2);
+    }
+
+    // Обязательные переопределения при перегрузке операторов == и !=
+    public override bool Equals(object obj)
+    {
+        if (obj is Component other)
+        {
+            return this == other;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, Price, GetType());
+    }
+}
+
+// -----------------------------------------------------
+// 3. Реализация Конкретных Классов
+// -----------------------------------------------------
+
+/// <summary>
+/// Конкретный компонент: Процессор (CPU).
+/// </summary>
+public class CPU : Component, IInstallable
+{
+    public int Cores { get; set; }
+    public double FrequencyGHz { get; set; }
+
+    public CPU(string name, decimal price, int cores, double frequency) : base(name, price)
+    {
+        Cores = cores;
+        FrequencyGHz = frequency;
+    }
+
+    // Переопределение GetInfo() для вывода специфической информации
+    public override string GetInfo()
+    {
+        return $"Процессор (CPU): {Name} | Ядра: {Cores} | Частота: {FrequencyGHz} GHz | Цена: {Price:C}";
+    }
+
+    // Реализация метода Install() из интерфейса IInstallable
+    public void Install()
+    {
+        Console.WriteLine($"[Установка] Процессор '{Name}' успешно установлен в сокет.");
+    }
+}
+
+/// <summary>
+/// Конкретный компонент: Оперативная память (RAM).
+/// </summary>
+public class RAM : Component, IInstallable
+{
+    public int CapacityGB { get; set; }
+    public int SpeedMHz { get; set; }
+
+    public RAM(string name, decimal price, int capacity, int speed) : base(name, price)
+    {
+        CapacityGB = capacity;
+        SpeedMHz = speed;
+    }
+
+    // Переопределение GetInfo()
+    public override string GetInfo()
+    {
+        return $"Оперативная память (RAM): {Name} | Объем: {CapacityGB} GB | Скорость: {SpeedMHz} MHz | Цена: {Price:C}";
+    }
+
+    // Реализация Install()
+    public void Install()
+    {
+        Console.WriteLine($"[Установка] Модуль памяти '{Name}' установлен в DIMM-слот.");
+    }
+}
+
+/// <summary>
+/// Конкретный компонент: Видеокарта (GPU).
+/// </summary>
+public class GPU : Component, IInstallable
+{
+    public int VRAM_GB { get; set; }
+    public string Manufacturer { get; set; }
+
+    public GPU(string name, decimal price, int vram, string manufacturer) : base(name, price)
+    {
+        VRAM_GB = vram;
+        Manufacturer = manufacturer;
+    }
+
+    // Переопределение GetInfo()
+    public override string GetInfo()
+    {
+        return $"Видеокарта (GPU): {Name} | VRAM: {VRAM_GB} GB | Производитель: {Manufacturer} | Цена: {Price:C}";
+    }
+
+    // Реализация Install()
+    public void Install()
+    {
+        Console.WriteLine($"[Установка] Видеокарта '{Name}' установлена в слот PCIe.");
+    }
+}
+
+/// <summary>
+/// Конкретный компонент: Накопитель (HDD/SSD).
+/// </summary>
+public class HDD : Component, IInstallable
+{
+    public long CapacityTB { get; set; }
+    public string Type { get; set; } // SSD or HDD
+
+    public HDD(string name, decimal price, long capacity, string type) : base(name, price)
+    {
+        CapacityTB = capacity;
+        Type = type;
+    }
+
+    // Переопределение GetInfo()
+    public override string GetInfo()
+    {
+        return $"Накопитель (HDD/SSD): {Name} | Тип: {Type} | Объем: {CapacityTB} TB | Цена: {Price:C}";
+    }
+
+    // Реализация Install()
+    public void Install()
+    {
+        Console.WriteLine($"[Установка] Накопитель '{Name}' подключен к SATA/NVMe.");
+    }
+}
+
+// -----------------------------------------------------
+// * Исправленный вспомогательный класс для демонстрации *
+// -----------------------------------------------------
+/// <summary>
+/// Класс, который является компонентом, но не реализует IInstallable.
+/// Используется для демонстрации перегрузки метода AddComponent.
+/// </summary>
+public class NonInstallableComponent : Component
+{
+    public NonInstallableComponent(string name, decimal price) : base(name, price) { }
+    
+    public override string GetInfo()
+    {
+        return $"Охлаждение (Non-Installable): {Name} | Цена: {Price:C}";
+    }
+}
+
+// -----------------------------------------------------
+// 4. Обобщенный (Generic) Класс Компьютера
+// -----------------------------------------------------
+
+/// <summary>
+/// Класс, который будет содержать список компонентов.
+/// Используем Generics для гибкости (ограничение where T : Component).
+/// </summary>
+/// <typeparam name="T">Тип компонента, должен быть наследником Component.</typeparam>
+public class Computer<T> where T : Component
+{
+    // Используем List<Component> для хранения компонентов, демонстрируя полиморфизм
+    private List<Component> _components = new List<Component>();
+    public string Name { get; private set; }
+
+    public Computer(string name)
+    {
+        Name = name;
+    }
+
+    // Метод AddComponent<TComp> с двумя ограничениями (Component и IInstallable)
+    // Демонстрация использования Generics и перегрузки методов.
+    public void AddComponent<TComp>(TComp component) where TComp : Component, IInstallable
+    {
+        _components.Add(component);
+        Console.WriteLine($"\n--- Добавление компонента: {component.Name} ({component.GetType().Name}) ---");
+        component.Install(); // Вызов метода из IInstallable
+    }
+
+    // Перегруженный метод AddComponent без IInstallable, для компонентов, которые не "устанавливаются"
+    public void AddComponent(Component component)
+    {
+        _components.Add(component);
+        Console.WriteLine($"\n--- Добавление компонента: {component.Name} ({component.GetType().Name}) ---");
+        Console.WriteLine($"[Установка] Компонент '{component.Name}' добавлен без специальной процедуры установки.");
+    }
+
+    // Метод RemoveComponent<TComp> для удаления компонента.
+    public bool RemoveComponent<TComp>(TComp component) where TComp : Component
+    {
+        // Удаляем все компоненты, которые считаются равными (используем перегруженный оператор ==)
+        if (_components.RemoveAll(c => c == component) > 0)
+        {
+            Console.WriteLine($"\nКомпонент '{component.Name}' успешно удален из {Name}.");
+            return true;
+        }
+        Console.WriteLine($"\nКомпонент '{component.Name}' не найден в {Name} для удаления.");
+        return false;
+    }
+
+    // Метод GetTotalPrice() для расчета общей стоимости
+    public decimal GetTotalPrice()
+    {
+        return _components.Sum(c => c.Price);
+    }
+
+    // Метод для вывода полной конфигурации
+    public void DisplayConfiguration()
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine($"\n===== Конфигурация Компьютера: {Name} =====");
+        Console.ResetColor();
+
+        if (!_components.Any())
+        {
+            Console.WriteLine("Конфигурация пуста.");
+            return;
+        }
+
+        foreach (var component in _components)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            // Демонстрация полиморфизма: вызов GetInfo() для конкретного типа (переопределенный метод)
+            Console.WriteLine(component.GetInfo());
+            Console.ResetColor();
+            // Демонстрация переопределенного ToString()
+            Console.WriteLine($"\tToString(): {component.ToString()}");
+        }
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"\nИТОГО: Общая стоимость компонентов: {GetTotalPrice():C}");
+        Console.ResetColor();
+        Console.WriteLine("==============================================");
+    }
+}
+
+
+// -----------------------------------------------------
+// 5. ComponentFactory (Дополнительное задание 1)
+// -----------------------------------------------------
+
+/// <summary>
+/// Статический класс-фабрика для создания предустановленных конфигураций.
+/// </summary>
+public static class ComponentFactory
+{
+    /// <summary>Создает базовую офисную конфигурацию.</summary>
+    public static Computer<Component> CreateOfficePC()
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("\n--- Использование ComponentFactory: Сборка офисного ПК ---");
+        Console.ResetColor();
+        var pc = new Computer<Component>("Office Workstation");
+
+        var cpu = new CPU("Intel Core i3-10100F", 9000m, 4, 3.6);
+        var ram = new RAM("Kingston 8GB DDR4", 3000m, 8, 2666);
+        // *** ИСПРАВЛЕНИЕ: Используем вынесенный класс NonInstallableComponent ***
+        var cooler = new NonInstallableComponent("Cooler Master Basic", 1500m);
+        var hdd = new HDD("Crucial P5 500GB SSD", 4500m, 0, "SSD");
+
+        // Добавление компонентов (используются Generic и не-Generic перегрузки AddComponent)
+        pc.AddComponent(cpu);
+        pc.AddComponent(ram);
+        pc.AddComponent(cooler); // Вызов не-Generic перегрузки
+        pc.AddComponent(hdd);
+
+        return pc;
+    }
+}
+
+
+// -----------------------------------------------------
+// 6. Консольное Приложение (Дополнительное задание 2)
+// -----------------------------------------------------
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        // Установка CultureInfo для корректного отображения валюты (рубли)
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+
+        Console.Title = "Демонстрация Полиморфизма и Generic-классов в C#";
+        Console.WriteLine("====================================================");
+        Console.WriteLine("=== Демонстрация Задания: Полиморфизм и Generics ===");
+        Console.WriteLine("====================================================");
+
+
+        // 1. Демонстрация Фабрики и Generic-класса Computer
+        var officePC = ComponentFactory.CreateOfficePC();
+        officePC.DisplayConfiguration();
+
+        // 2. Демонстрация перегрузки операторов == и !=
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("\n--- Демонстрация Перегрузки Операторов == и != ---");
+        Console.ResetColor();
+        var gpu1 = new GPU("GeForce GTX 1660", 15000m, 6, "NVIDIA");
+        var gpu2 = new GPU("GeForce GTX 1660", 15000m, 6, "NVIDIA"); // Такой же компонент
+        var gpu3 = new GPU("Radeon RX 580", 10000m, 8, "AMD");
+
+        Console.WriteLine($"GPU1 == GPU2 (должно быть True): {gpu1 == gpu2}");
+        Console.WriteLine($"GPU1 != GPU3 (должно быть True): {gpu1 != gpu3}");
+
+
+        // 3. Демонстрация удаления компонента
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("\n--- Демонстрация Удаления Компонента ---");
+        Console.ResetColor();
+
+        // Создаем компонент для удаления, идентичный тому, что был добавлен через фабрику
+        var ramToRemove = new RAM("Kingston 8GB DDR4", 3000m, 8, 2666);
+
+        // Попытка удаления
+        officePC.RemoveComponent(ramToRemove);
+        
+        // Повторное удаление (должно вернуть False)
+        var fakeRam = new RAM("Fake RAM", 100m, 1, 100);
+        officePC.RemoveComponent(fakeRam);
+
+        // 4. Проверка новой конфигурации после удаления
+        officePC.DisplayConfiguration();
+        
+        // 5. Демонстрация полиморфизма через базовый класс
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("\n--- Демонстрация Полиморфизма (List<Component>) ---");
+        Console.ResetColor();
+        List<Component> mixedComponents = new List<Component>
+        {
+            new CPU("i9", 50000m, 12, 5.0),
+            new RAM("Viper 16GB", 7000m, 16, 3200),
+            new GPU("RTX 4090", 150000m, 24, "NVIDIA")
+        };
+
+        foreach (var comp in mixedComponents)
+        {
+            // Вызов GetInfo() на переменной типа Component,
+            // но исполняется метод конкретного класса (CPU, RAM, GPU).
+            Console.WriteLine(comp.GetInfo());
+        }
+        Console.WriteLine("====================================================");
+    }
+}
